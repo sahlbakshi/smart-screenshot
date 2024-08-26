@@ -3,6 +3,7 @@ import io
 from PIL import Image
 import base64
 from openai import OpenAI
+from textwrap import dedent
 
 """Find the most recently added PNG screenshot"""
 def find_most_recent_screenshot(directory):
@@ -65,6 +66,11 @@ def format_screenhot(most_recent_screenshot):
 def get_description_for_screenhot(base64_img):
     open_ai_key = ''
     client = OpenAI(api_key=open_ai_key)
+    prompt = """
+    This is a screenshot I took on my screen.
+    Give me a short and descriptive file name for this image, using up to 6 words separated by spaces. 
+    Make sure to exclude the file extension.
+    """
     
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -74,24 +80,20 @@ def get_description_for_screenhot(base64_img):
                 "content": [
                     {
                         "type": "text", 
-                        "text": "This is a screenshot I took on my screen."
+                        "text": dedent(prompt)
                     },
                     {
                         "type": "image_url",
                         "image_url": {
                             "url": f"data:image/png;base64,{base64_img}",
                         },
-                    },
-                    {
-                        "type": "text", 
-                        "text": "Give me with a concise, descriptive file name for this image, using up to 6 words separated by spaces. Make sure to exclude the file extension."
                     }
                 ],
             }
         ],
         max_tokens=300,
     )
-    return response.choices[0].message.content.strip()
+    return response.choices[0].message.content
 
 
 def main():
