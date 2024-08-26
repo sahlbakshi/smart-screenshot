@@ -1,3 +1,3 @@
-## Straights
+## Smart Screenshot
 
-[![Watch the demo](./thumbnail.png)](./smartscreenshotdemo.mp4)
+[![Watch the demo](./thumbnail.png)](https://www.sahlbakshi.com/)
